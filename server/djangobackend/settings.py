@@ -27,7 +27,8 @@ DEBUG = True
 
 APPEND_SLASH = True
 
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = ["localhost",
+                 "ohmcapstone.us-east.mybluemix.net"]
 
 
 # Application definition
