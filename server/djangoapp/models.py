@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.timezone import now
+from datetime import datetime
 
 
 # Create your models here.
@@ -41,11 +42,11 @@ class CarModel(models.Model):
         (SPORT,'Sport')
         ]
 
-    type = models.CharField(max_length = 20, choices=TYPE_CHOICES)
+    car_type = models.CharField(max_length = 20, choices=TYPE_CHOICES)
     year = models.DateField()
 
     def __str__(self):
-        return self.year + " " + self.make + " " + self.name
+        return self.year.strftime("%Y") + " " + self.make.name + " " + self.name
 
 # <HINT> Create a plain Python class `CarDealer` to hold dealer data
 class CarDealer:
@@ -88,13 +89,3 @@ class DealerReview:
 
     def __str__(self):
         return "Review: " + self.review
-
-
-"""
-# <HINT> Create a plain Python class `DealerReview` to hold review data
-class DealerReview(models.Model):
-    models.IntegerField()
-    make = models.ForeignKey(CarModel, on_delete=models.CASCADE)
-    dealership = models.IntegerField()
-
-"""
