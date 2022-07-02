@@ -9,8 +9,9 @@ from requests.auth import HTTPBasicAuth
 #                                     auth=HTTPBasicAuth('apikey', api_key))
 def get_request(url, **kwargs):
     print(kwargs)
-    kwargs = json.dumps(kwargs)
+    #kwargs = json.dumps(kwargs)
     print("GET from {} ".format(url))
+    #print("with from {} ".format(kwargs))
     try:
         # Call get method of requests library with URL and parameters
         response = requests.get(url, headers={'Content-Type': 'application/json'},
@@ -55,10 +56,10 @@ def get_dealers_from_cf(url, **kwargs):
 # def get_dealer_by_id_from_cf(url, dealerId):
 # - Call get_request() with specified arguments
 # - Parse JSON results into a DealerView object list
-def get_dealers_from_cf(url, **kwargs):
+def get_dealer_by_id_from_cf(url, dealerId):
     results = []
     # Call get_request with a URL parameter
-    json_result = get_request(url, **kwargs)
+    json_result = get_request(url, **dealerId)
     if json_result:
         # Get the row list in JSON as dealers
         dealers = json_result["dbs"]
