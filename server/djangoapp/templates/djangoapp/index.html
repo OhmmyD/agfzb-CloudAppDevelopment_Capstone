@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
+
     <title>Dealership Review</title>
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -11,71 +14,103 @@
     <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
     <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
 
-        <style>
-        ul {
-          list-style-type: none;
-          margin: 0;
-          padding: 0;
-          overflow: hidden;
-          background-color: #333;
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+
+        body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
         }
-        
-        li {
-          float: left;
-        }
-        
-        li a {
-          display: block;
-          color: white;
-          text-align: center;
-          padding: 14px 16px;
-          text-decoration: none;
-        }
-        
-        li a:hover:not(.active) {
-          background-color: #111;
-        }
-        
-        .active {
-          background-color: #04AA6D;
-        }
-        </style>
+
+        .topnav {
+            overflow: hidden;
+            background-color: #CC5500;
+            }
+
+        .topnav a {
+            color: #FFFFFF;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            }
+
+        .topnav .left-side a {
+            float: left;
+            }
+
+        .topnav .right-side {
+            float: right;
+            }
+
+        .topnav a:hover {
+            background-color: #702F00;
+            }
+
+        .topnav .right-side .form-inline input[type=text], input[type=password] {
+            float: right;
+            margin-right: 5px;
+            margin-left: 20px;
+            font-size: 15px;
+            background: #FFFFFF;
+            border: none;
+            width: 150px; /* adjust as needed (as long as it doesn't break the topnav) */
+            }
+
+    </style>
 
 </head>
 
-    <body>
-    <!--Add a nav bar here -->
-    <ul>
-        <li><a href="/djangoapp">Home</a></li>
-        <li><a href="/djangoapp/about">About Us</a></li>
-        <li><a href="/djangoapp/contact">Contact Us</a></li>
+<body>
+
+    <nav class="topnav">
+
+        <span class = "left-side">
+
+            <a href="/djangoapp">Home</a>
+            <a href="/djangoapp/about">About Us</a>
+            <a href="/djangoapp/contact">Contact Us</a>
+
+        </span>
+
+        <span class = "right-side" style="display: inline;">
         {% if user.is_authenticated %}
 
-        <li>
             <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
             <a class="btn btn-link" href="/djangoapp/logout">Logout</a>
-        </li>
-  
+
         {% else %}
-        <li>
+
             <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
-            {% csrf_token %}
-            <div class="input-group">
-            <input type="text" class="form-control" placeholder="Username" name="username" >
-            <input type="password" class="form-control" placeholder="Username" name="psw" >
-            <button class="btn btn-primary" type="submit">Login</button>
-            <a class="btn btn-link" href="/djangoapp/registration">Sign Up</a>
-            </div>
+
+                {% csrf_token %}
+
+                
+                <input type="text" class="form-control" placeholder="Username" name="username" >
+                
+                <input type="password" class="form-control" placeholder="Password" name="psw" >
+
+                <a href="/djangoapp/login">Log In</a>
+                <a href="/djangoapp/registration">Register</a>
+    
+
             </form>
-        </li>
+
         {% endif %}
-    </ul>
+        </span>
 
+        
 
-      
+    </nav>
 
-    <!--Add a dealer table here -->
+</body>
+<body>
+{{context}}
+</body>
 
-    </body>
 
 </html>
