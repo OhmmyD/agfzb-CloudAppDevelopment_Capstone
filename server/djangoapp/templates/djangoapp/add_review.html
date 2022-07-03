@@ -24,11 +24,16 @@
             </select>
     
         </form>
-        -->
         {{context}}
         {% for car in context.carmodel.CarModel %}
             {{car}}
         {% endfor %}
+        -->
+
+        {% for row in carmodel %}
+            {{row.year}}
+        {% endfor %}
+
 
     </body>
 </html>

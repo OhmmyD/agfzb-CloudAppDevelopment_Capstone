@@ -107,13 +107,14 @@ def get_dealer_details(request, dealerId):
 # Create a `add_review` view to submit a review
 # def add_review(request, dealer_id):
 # ...
-class add_review(request, dealerId):
+def add_review(request, dealerId):
     
-    def get(self, request):
+    if request.method == 'GET':
 
-        context = {"carmodel": CarModel.objects.filter()}
-
-        return(request, 'djangoapp/add_review.html', context)
+        context = {}
+        context["carmodel"] = CarModel.objects.filter()
+    
+        return render(request, 'djangoapp/add_review.html', context)
     #if request.method == 'GET':
 
         #context = Team.objects.get(id=team_id) #Information on team is passed.
