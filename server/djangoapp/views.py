@@ -10,6 +10,8 @@ from datetime import datetime
 import logging
 import json
 
+from django import forms
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -107,51 +109,33 @@ def get_dealer_details(request, dealerId):
 # Create a `add_review` view to submit a review
 # def add_review(request, dealer_id):
 # ...
+
+class ReviewForm(forms.Form):
+    review = forms.CharField(label='content', max_length=100)
+
 def add_review(request, dealerId):
     
     if request.method == 'GET':
 
+        # Get car models from sqlite
         context = {}
         context["carmodel"] = CarModel.objects.filter()
-    
-        return render(request, 'djangoapp/add_review.html', context)
-    #if request.method == 'GET':
-
-        #context = Team.objects.get(id=team_id) #Information on team is passed.
-        #context = {"carmodel": CarModel.objects.filter()}
 
         # Get dealership information from CF
-        #url = "https://6c8c4165.us-east.apigw.appdomain.cloud/dealership/api/dealership/dealerId/"
-        #dealerId = {'dealerId': dealerId}
-        #dealerships = get_dealer_by_id_from_cf(url, dealerId)
+        url = "https://6c8c4165.us-east.apigw.appdomain.cloud/dealership/api/dealership/dealerId/info"
+        dealerId = {'dealerId': dealerId}
+        context["dealership"] = get_dealer_by_id_from_cf(url, dealerId)
+    
+        return render(request, 'djangoapp/add_review.html', context)
 
-        # Get dealership inventory from sqlite db
-        
-    #return render(request, 'djangoapp/add_review.html', context)
+    if request.method == 'POST':
 
+        # Build dict
+        form = ReviewForm(request.POST)
 
-    """
+        test = request.POST.get('content')
 
-    elif request.method == 'POST':
-        # Check if user exists
-        username = request.POST['username'].format(dealerID)
-        password = request.POST['psw']
-        first_name = request.POST['firstname']
-        last_name = request.POST['lastname']
-        user_exist = False
-        try:
-            User.objects.get(username=username)
-            user_exist = True
-        except:
-            logger.error("New user")
-        if not user_exist:
-            user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name,
-                                            password=password)
-            login(request, user)
-            return redirect("djangoapp:index")
-        else:
-            context['message'] = "User already exists."
-            return render(request, 'djangoapp/registration.html', context)
+        # Post review to CF
+        print(1 + "")
 
-
-    """
+        return None

@@ -10,30 +10,35 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
 
 </head>
+
     <body>
-        <!--
-        <form>
+
+        <form method="post" name="review">
+
+            {% csrf_token %}
+        
             <textarea class="form-control" id="content" name="content" rows="2" required></textarea>
+            <br>
 
             <input class="form-check-input" type="checkbox" name="purchasecheck" id="purchasecheck">
 
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
+                <label class="form-check-label">Option 1</label>
+            </div>
+            <br></br>
+
             <select name="car" id="car" class="form-select" required>
-                 {% for car in context.carmodel %}
-                     <option selected value={{car.id}}>car</option>
-                 {% endfor %}
+                {% for car in carmodel %}
+                    <option selected value={{car.id}}>{{car}}</option>
+                {% endfor %}
             </select>
-    
+            <br></br>
+
+            <input type="submit" value="Submit">
+
         </form>
-        {{context}}
-        {% for car in context.carmodel.CarModel %}
-            {{car}}
-        {% endfor %}
-        -->
-
-        {% for row in carmodel %}
-            {{row.year}}
-        {% endfor %}
-
 
     </body>
+
 </html>
