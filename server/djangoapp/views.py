@@ -85,10 +85,11 @@ def get_dealerships(request):
     context = {}
     if request.method == "GET":
         url = "https://6c8c4165.us-east.apigw.appdomain.cloud/dealership/api/dealership"
+
         # Get dealers from the URL
         dealerships = get_dealers_from_cf(url)
-        # Concat all dealer's short name
-        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
+
+        print(1 + "")
         return render(request, 'djangoapp/index.html', context)
 
 
@@ -97,14 +98,21 @@ def get_dealerships(request):
 # ...
 def get_dealer_details(request, dealerId):
     if request.method == "GET":
-        url = "https://6c8c4165.us-east.apigw.appdomain.cloud/dealership/api/dealership/dealerId/"
+
+        context = {}
         dealerId = {'dealerId': dealerId}
-        # Get dealers from the URL
-        dealerships = get_dealer_by_id_from_cf(url, dealerId)
-        # Concat all dealer's short name
-        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
-        # Return a list of dealer short name
-        return HttpResponse(dealer_names)
+
+        # Get dealership details
+        url = "https://6c8c4165.us-east.apigw.appdomain.cloud/dealership/api/dealership/dealerId/info"
+        dealership = get_dealer_by_id_from_cf(url, dealerId)
+        context['dealership'] = dealership
+
+        # Get reviews
+        url = "https://6c8c4165.us-east.apigw.appdomain.cloud/dealership/api/dealership/dealerId"
+        reviews = get_dealer_reviews_from_cf(url, dealerId)
+        context['reviews'] = reviews
+
+        return render(request, 'djangoapp/add_review.html', context)
 
 # Create a `add_review` view to submit a review
 # def add_review(request, dealer_id):
@@ -143,13 +151,14 @@ def add_review(request, dealerId):
                              "dealership": dealerId,
                              "review": request.POST.get('content'),
                              "purchase": purchase,
-                             "purchase_date": "02/16/2021",
+                             "purchase_date": request.POST.get('date'),
                              "car_make": car[1],
                              "car_model": car[2],
                              "car_year": car[0]}}
 
+        print(1 + "")
+
         # Post review to CF
-        #review = json.dumps(review)
         url = "https://6c8c4165.us-east.apigw.appdomain.cloud/dealership/api/review-post"
         response = requests.post(url, json=review)
         status_code = response.status_code

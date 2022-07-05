@@ -27,7 +27,7 @@
 
             <select name="car" id="car" class="car" required>
                 {% for car in carmodel %}
-                    <option selected value="{{car.year}}/{{car.make.name}}/{{car.name}}">{{car}}</option>
+                    <option selected value="{{car.year|date:'Y-m-d'}}/{{car.make.name}}/{{car.name}}">{{car}}</option>
                 {% endfor %}
             </select>
             <br></br>
