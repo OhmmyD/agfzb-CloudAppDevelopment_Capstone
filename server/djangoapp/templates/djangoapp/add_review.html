@@ -20,20 +20,19 @@
             <textarea class="form-control" id="content" name="content" rows="2" required></textarea>
             <br>
 
-            <input class="form-check-input" type="checkbox" name="purchasecheck" id="purchasecheck">
+            <input class="purchase" type="checkbox" id="purchase" name="purchase" value=true>
+            <label class="form-check-label"> Check here if you purchased a vehicle.</label>
 
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="check1" name="option1" value="something" checked>
-                <label class="form-check-label">Option 1</label>
-            </div>
             <br></br>
 
-            <select name="car" id="car" class="form-select" required>
+            <select name="car" id="car" class="car" required>
                 {% for car in carmodel %}
-                    <option selected value={{car.id}}>{{car}}</option>
+                    <option selected value="{{car.year}}/{{car.make.name}}/{{car.name}}">{{car}}</option>
                 {% endfor %}
             </select>
             <br></br>
+            
+            <input type="date" id="date" name="date">
 
             <input type="submit" value="Submit">
 

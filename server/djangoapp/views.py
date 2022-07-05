@@ -112,6 +112,7 @@ def get_dealer_details(request, dealerId):
 
 class ReviewForm(forms.Form):
     review = forms.CharField(label='content', max_length=100)
+    car = forms.CharField(label='char', max_length=100)
 
 def add_review(request, dealerId):
     
@@ -131,11 +132,26 @@ def add_review(request, dealerId):
     if request.method == 'POST':
 
         # Build dict
-        form = ReviewForm(request.POST)
+        
+        car = request.POST.get('car')
+        car = car.split("/")
 
-        test = request.POST.get('content')
+        if request.POST.get('purchase') == 'true': purchase = 'True'
+        else: purchase = 'False'
+
+        review = {"review": {"name": request.user.first_name + " " + request.user.last_name,
+                             "dealership": dealerId,
+                             "review": request.POST.get('content'),
+                             "purchase": purchase,
+                             "purchase_date": "02/16/2021",
+                             "car_make": car[1],
+                             "car_model": car[2],
+                             "car_year": car[0]}}
 
         # Post review to CF
-        print(1 + "")
+        #review = json.dumps(review)
+        url = "https://6c8c4165.us-east.apigw.appdomain.cloud/dealership/api/review-post"
+        response = requests.post(url, json=review)
+        status_code = response.status_code
 
-        return None
+        return render(request, 'dealerId={0}'.format(dealerId))
