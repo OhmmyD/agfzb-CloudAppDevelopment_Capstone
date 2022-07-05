@@ -7,6 +7,7 @@ from .restapis import *
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
+
 import logging
 import json
 
@@ -89,7 +90,6 @@ def get_dealerships(request):
         # Get dealers from the URL
         dealerships = get_dealers_from_cf(url)
 
-        print(1 + "")
         return render(request, 'djangoapp/index.html', context)
 
 
@@ -112,7 +112,7 @@ def get_dealer_details(request, dealerId):
         reviews = get_dealer_reviews_from_cf(url, dealerId)
         context['reviews'] = reviews
 
-        return render(request, 'djangoapp/add_review.html', context)
+        return render(request, 'djangoapp/dealer_details.html', context)
 
 # Create a `add_review` view to submit a review
 # def add_review(request, dealer_id):
@@ -139,28 +139,38 @@ def add_review(request, dealerId):
 
     if request.method == 'POST':
 
+        review = {'name': request.user.first_name + " " + request.user.last_name,
+                  'dealership': dealerId,
+                  'review': request.POST.get('content')}
+
         # Build dict
-        
-        car = request.POST.get('car')
-        car = car.split("/")
+        if request.POST.get('purchase') == 'true':
 
-        if request.POST.get('purchase') == 'true': purchase = 'True'
-        else: purchase = 'False'
+            review['purchase'] = 'true'
 
-        review = {"review": {"name": request.user.first_name + " " + request.user.last_name,
-                             "dealership": dealerId,
-                             "review": request.POST.get('content'),
-                             "purchase": purchase,
-                             "purchase_date": request.POST.get('date'),
-                             "car_make": car[1],
-                             "car_model": car[2],
-                             "car_year": car[0]}}
+            car = request.POST.get('car')
+            car = car.split("/")
+            review['car_make'] = car[1]
+            review['car_model'] = car[2]
+            review['car_year'] = car[0]
 
-        print(1 + "")
+            date = datetime.strptime(request.POST.get('date'), "%Y-%m-%d")
+            review['purchase_date'] = date.strftime("%m/%d/%Y")
+    
+        else:
+
+            review['purchase'] = 'false'
+
+            review['car_make'] = ''
+            review['car_model'] = ''
+            review['car_year'] = ''
+            review['purchase_date'] = ''
+
+        review = {"review": review}
 
         # Post review to CF
         url = "https://6c8c4165.us-east.apigw.appdomain.cloud/dealership/api/review-post"
         response = requests.post(url, json=review)
         status_code = response.status_code
 
-        return render(request, 'dealerId={0}'.format(dealerId))
+        return redirect("djangoapp:get_dealer_details", dealerId=dealerId)
