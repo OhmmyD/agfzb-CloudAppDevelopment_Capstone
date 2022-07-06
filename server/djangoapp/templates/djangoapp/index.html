@@ -6,29 +6,23 @@
 
     <title>Dealership Review</title>
 
+    {% load static %}
+    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <style>
 
+        /* Body */
         body {
         margin: 0;
         font-family: Arial, Helvetica, sans-serif;
+        background-color: #FFFFFF;
         }
 
+        /* Navigation */
         .topnav {
             overflow: hidden;
-            background-color: #CC5500;
+            background-color: #8D8DAA;
             }
 
         .topnav a {
@@ -47,8 +41,14 @@
             float: right;
             }
 
+        .topnav .right-side: hover {
+            float: right;
+            }
+
         .topnav a:hover {
-            background-color: #702F00;
+            background-color: #F56D91;
+            text-decoration: none;
+            color: #FFFFFF;
             }
 
         .topnav .right-side .form-inline input[type=text], input[type=password] {
@@ -61,56 +61,137 @@
             width: 150px; /* adjust as needed (as long as it doesn't break the topnav) */
             }
 
+        /* Container */
+        .card-container {
+            width: 70%;
+            margin: 0 auto;
+            background-color: #FFFFFF
+        }
+
+        .card-container .card-container-header {
+            margin: 0 auto;
+            background-color: #8D8DAA;
+            color: #FFFFFF;
+            text-align: center;
+            padding: 25px;
+        }
+
+        .card-container .card-container-text {
+            color: #FFFFFF;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .card-container .btn {
+            background-color: #F56D91;
+            color: #FFFFFF
+        }
+
+        .card-container .card-columns{
+            background-color: #DFDFDE;
+        }
+
+
+        .card{
+            background-color: #DFDFDE;
+        }
+
+        /* Table */
+        table {
+
+            border: 0px solid;
+        }
+
+        th{
+            text-align: center;
+            color: #FFFFFF;
+            background-color: #F56D91;
+
+        }
+
+        td{
+            text-align: center;
+            background-color: #FFFFFF;
+
+        }
+
     </style>
 
 </head>
 
-<body>
+    <body>
 
-    <nav class="topnav">
-
-        <span class = "left-side">
-
-            <a href="/djangoapp">Home</a>
-            <a href="/djangoapp/about">About Us</a>
-            <a href="/djangoapp/contact">Contact Us</a>
-
-        </span>
-
-        <span class = "right-side" style="display: inline;">
-        {% if user.is_authenticated %}
-
-            <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
-            <a class="btn btn-link" href="/djangoapp/logout">Logout</a>
-
-        {% else %}
-
-            <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
-
-                {% csrf_token %}
-
-                
-                <input type="text" class="form-control" placeholder="Username" name="username" >
-                
-                <input type="password" class="form-control" placeholder="Password" name="psw" >
-
-                <a href="/djangoapp/login">Log In</a>
-                <a href="/djangoapp/registration">Register</a>
+        <!-- Navigation Bar -->
+        <nav class="topnav">
+            <span class = "left-side">
     
+                <a href="/djangoapp">Home</a>
+                <a href="/djangoapp/about">About Us</a>
+                <a href="/djangoapp/contact">Contact Us</a>
+    
+            </span>
+    
+            <span class = "right-side" style="display: inline;">
+            {% if user.is_authenticated %}
+    
+                <a class="btn btn-link" href="#">{{ user.first_name }} {{user.last_name}} ({{ user.username }})</a>
+                <a class="btn btn-link" href="/djangoapp/logout">Logout</a>
+    
+            {% else %}
+    
+                <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+    
+                    {% csrf_token %}
+                    
+                    <input type="text" class="form-control" placeholder="Username" name="username" >
+                    
+                    <input type="password" class="form-control" placeholder="Password" name="psw" >
+    
+                    <a href="/djangoapp/login">Log In</a>
+                    <a href="/djangoapp/registration">Register</a>
+    
+                </form>
+    
+            {% endif %}
+            </span>
+        </nav>
 
-            </form>
+        <br>
 
-        {% endif %}
-        </span>
+        <!-- Dealership Info -->
+        <div class="card-container">
 
-        
+            <h5 class="card-container-header">
+                Dealerships
+            </h5>
 
-    </nav>
+        <!-- Review Cards -->
+        <div class="card" style="margin: 0 auto; padding: 25px;">
 
-</body>
-<body>
-{{context}}
-</body>
+                    <table class="table" id="table">
+                        <thead>
+                            <tr>
+                                <th data-field="full_name">Dealership</th>
+                                <th data-field="state">State</th>
+                                <th data-field="city">City</th>
+                                <th data-field="address">Address</th>                                
 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dealer in dealerships %}
+                                <tr>
+                                    <td><a href="dealerId={{dealer.id}}" style = "color: #F56D91;">{{dealer.full_name}}</a></td>
+                                    <td>{{dealer.state}}</td>
+                                    <td>{{dealer.city}}</td>
+                                    <td>{{dealer.address}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+        </div>
+
+    </body>
 
 </html>

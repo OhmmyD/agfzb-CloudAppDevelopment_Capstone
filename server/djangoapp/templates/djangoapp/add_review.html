@@ -1,42 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
+
+    <title>Dealership Review</title>
+
     {% load static %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <style>
+
+        /* Body */
+        body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #FFFFFF;
+        }
+
+        /* Navigation */
+        .topnav {
+            overflow: hidden;
+            background-color: #8D8DAA;
+            }
+
+        .topnav a {
+            color: #FFFFFF;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            }
+
+        .topnav .left-side a {
+            float: left;
+            }
+
+        .topnav .right-side {
+            float: right;
+            }
+
+        .topnav .right-side: hover {
+            float: right;
+            }
+
+        .topnav a:hover {
+            background-color: #F56D91;
+            text-decoration: none;
+            color: #FFFFFF;
+            }
+
+        .topnav .right-side .form-inline input[type=text], input[type=password] {
+            float: right;
+            margin-right: 5px;
+            margin-left: 20px;
+            font-size: 15px;
+            background: #FFFFFF;
+            border: none;
+            width: 150px; /* adjust as needed (as long as it doesn't break the topnav) */
+            }
+
+        /* Container */
+        .card-container {
+            width: 70%;
+            margin: 0 auto;
+            background-color: #FFFFFF
+        }
+
+        .card-container .card-container-header {
+            margin: 0 auto;
+            background-color: #8D8DAA;
+            color: #FFFFFF;
+            text-align: left;
+            padding: 25px;
+        }
+
+        .card-container .card-container-text {
+            color: #FFFFFF;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .card-container .btn {
+            background-color: #F56D91;
+            color: #FFFFFF
+        }
+
+        .card-container .card-columns{
+            background-color: #DFDFDE;
+        }
+
+
+        .card{
+            background-color: #DFDFDE;
+        }
+
+    </style>
 
 </head>
 
     <body>
 
-        <form method="post" name="review">
+        <!-- Navigation Bar -->
+        <nav class="topnav">
+            <span class = "left-side">
+    
+                <a href="/djangoapp">Home</a>
+                <a href="/djangoapp/about">About Us</a>
+                <a href="/djangoapp/contact">Contact Us</a>
+    
+            </span>
+    
+            <span class = "right-side" style="display: inline;">
+            {% if user.is_authenticated %}
+    
+                <a class="btn btn-link" href="#">{{ user.first_name }} {{user.last_name}} ({{ user.username }})</a>
+                <a class="btn btn-link" href="/djangoapp/logout">Logout</a>
+    
+            {% else %}
+    
+                <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+    
+                    {% csrf_token %}
+                    
+                    <input type="text" class="form-control" placeholder="Username" name="username" >
+                    
+                    <input type="password" class="form-control" placeholder="Password" name="psw" >
+    
+                    <a href="/djangoapp/login">Log In</a>
+                    <a href="/djangoapp/registration">Register</a>
+    
+                </form>
+    
+            {% endif %}
+            </span>
+        </nav>
 
-            {% csrf_token %}
+        <br>
+
+        <!-- Dealership Info -->
+        <div class="card-container">
+
+            <h5 class="card-container-header">
+                Leave a review for {{dealership.full_name}}:
+            </h5>
+
+        <!-- Review Cards -->
+        <div class="card" style="margin: 0 auto; padding: 25px;">
+
+                <form method="post" name="review">
+
+                    {% csrf_token %}
+                    
+                    Review:
+                    <textarea class="form-control" id="content" name="content" rows="2" required></textarea>
+                    <br>
         
-            <textarea class="form-control" id="content" name="content" rows="2" required></textarea>
-            <br>
+                    <input class="purchase" type="checkbox" id="purchase" name="purchase" value=true>
+                    <label class="form-check-label"> Check here if you purchased a vehicle.</label>
+        
+                    <br></br>
 
-            <input class="purchase" type="checkbox" id="purchase" name="purchase" value=true>
-            <label class="form-check-label"> Check here if you purchased a vehicle.</label>
+                    Vehicle Purchase: 
+                    <select name="car" id="car" class="car">
+                        {% for car in carmodel %}
+                            <option selected value="{{car.year|date:'Y'}}/{{car.make.name}}/{{car.name}}">{{car}}</option>
+                        {% endfor %}
+                    </select>
+                    <br></br>
+                    
+                    Purchase Date: 
+                    <input type="date" id="date" name="date">
+                    <br></br>
+                    <br></br>
+                    <input type="submit" value="Submit Review">
+        
+                </form>
 
-            <br></br>
-
-            <select name="car" id="car" class="car" required>
-                {% for car in carmodel %}
-                    <option selected value="{{car.year|date:'Y'}}/{{car.make.name}}/{{car.name}}">{{car}}</option>
-                {% endfor %}
-            </select>
-            <br></br>
-            
-            <input type="date" id="date" name="date">
-
-            <input type="submit" value="Submit">
-
-        </form>
+        </div>
 
     </body>
 

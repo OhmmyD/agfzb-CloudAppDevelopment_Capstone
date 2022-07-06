@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
+
     <title>Dealership Review</title>
+
     {% load static %}
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
     <style>
@@ -12,13 +16,13 @@
         body {
         margin: 0;
         font-family: Arial, Helvetica, sans-serif;
-        background-color: #C2DED1;
+        background-color: #FFFFFF;
         }
 
         /* Navigation */
         .topnav {
             overflow: hidden;
-            background-color: #354259;
+            background-color: #8D8DAA;
             }
 
         .topnav a {
@@ -42,7 +46,7 @@
             }
 
         .topnav a:hover {
-            background-color: #415a72;
+            background-color: #F56D91;
             text-decoration: none;
             color: #FFFFFF;
             }
@@ -61,13 +65,12 @@
         .card-container {
             width: 70%;
             margin: 0 auto;
-            background-color: #ECE5C7
+            background-color: #FFFFFF
         }
 
-        /* Container */
         .card-container .card-container-header {
             margin: 0 auto;
-            background-color: #354259;
+            background-color: #8D8DAA;
             color: #FFFFFF;
             text-align: center;
             font-size: 70px;
@@ -80,8 +83,16 @@
             font-size: 20px;
         }
 
-    </style>
+        .card-container .btn {
+            background-color: #F56D91;
+            color: #FFFFFF
+        }
 
+        .card-container .card-columns{
+            background-color: #DFDFDE;
+        }
+
+    </style>
 
 </head>
 
@@ -116,7 +127,6 @@
     
                     <a href="/djangoapp/login">Log In</a>
                     <a href="/djangoapp/registration">Register</a>
-        
     
                 </form>
     
@@ -124,52 +134,71 @@
             </span>
         </nav>
 
-    <br>
+        <br>
 
-    <!-- Dealership Info -->
-    <div class="card-container">
+        <!-- Dealership Info -->
+        <div class="card-container">
 
-        <h5 class="card-container-header">
-            {{dealership.full_name}}
-            <div class="card-container-text">
-                {{dealership.address}}
-                <br>
-                {{dealership.city}}, {{dealership.st}} {{dealership.zip}}
-                <br>
-                <br>
-                <a href="dealerId={{dealership.id}}/add-review" class="btn btn-primary">Leave a Review</a>
-            </div>
-        </h5>
-
-    <!-- Review Cards -->
-    <div class="card-columns" style="margin: 0 auto; padding: 25px;">
-    {% for review in reviews %}
-    <div class="card">
-
-        <h5 class="card-header">
-            <img class="card-img-left" src="{{MEDIA_URL}}/emoji/{{review.sentiment}}.png"
-                 width="35" height="25" style="padding: 0px 10px 0px 0px;">
-            "{{review.review}}"
-        </h5>
-        
-        <div class="card-body" style = "text-align: right;">
-          <h5 class="card-title"> - {{review.name}}</h5>
-          {% if review.purchase == 'true' %}
-                <p class="card-text">
-                    Car Purchased: {{review.car_year}} {{review.car_make}} {{review.car_model}}
+            <h5 class="card-container-header">
+                {{dealership.full_name}}
+                <div class="card-container-text">
+                    {{dealership.address}}
                     <br>
-                    Purchase Date: {{review.purchase_date}}
-                </p>
-          {% else %}
-                <p class="card-text">This user did not purchase a vehicle.</p>
-          {% endif %}
-        </div>
-      </div>
-      <br>
-      {% endfor %}
-      </div>
+                    {{dealership.city}}, {{dealership.st}} {{dealership.zip}}
+                    <br>
+                    <br>
 
-    </div>
+                    {% if user.is_authenticated %}
+                        <a href="dealerId={{dealership.id}}/add-review" class="btn">Leave a Review</a>
+                    {% else %}
+                        Sign in or Register to leave a review.
+                    {% endif %}
+                </div>
+            </h5>
+
+        <!-- Review Cards -->
+        <div class="card-columns" style="margin: 0 auto; padding: 25px;">
+        {% for review in reviews %}
+
+            <div class="card">
+
+                <div class="card-body">
+                <h5 class="card-title">
+                    <p style = "text-align: left;">
+                        <img class="card-img-left" src="{{MEDIA_URL}}/emoji/{{review.sentiment}}.png"
+                            width="35" height="25" style="padding: 0px 10px 0px 0px;">
+                        "{{review.review}}"
+                    </p>
+                        
+                    <p style = "text-align: right;">
+
+                        - {{review.name}}
+                        <br>
+                    
+                    <span style="font-size: 15px; color: #999999; text-align: right">
+
+                        {% if review.purchase == 'true' %}
+
+                            Car Purchased: {{review.car_year}} {{review.car_make}} {{review.car_model}}
+                            <br>
+                            Purchase Date: {{review.purchase_date}}
+                            
+                        {% else %}
+
+                            This user did not purchase a vehicle.
+
+                        {% endif %}
+
+                    </span>
+                    </p>
+
+                </div>
+                
+            </div>
+            <br>
+
+        {% endfor %}
+        </div>
 
     </body>
 

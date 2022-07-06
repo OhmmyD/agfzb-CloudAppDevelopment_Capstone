@@ -89,6 +89,7 @@ def get_dealerships(request):
 
         # Get dealers from the URL
         dealerships = get_dealers_from_cf(url)
+        context['dealerships'] = dealerships
 
         return render(request, 'djangoapp/index.html', context)
 
@@ -128,7 +129,7 @@ def add_review(request, dealerId):
 
         # Get car models from sqlite
         context = {}
-        context["carmodel"] = CarModel.objects.filter()
+        context["carmodel"] = CarModel.objects.filter(dealership = dealerId)
 
         # Get dealership information from CF
         url = "https://6c8c4165.us-east.apigw.appdomain.cloud/dealership/api/dealership/dealerId/info"
