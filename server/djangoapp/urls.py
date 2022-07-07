@@ -13,7 +13,7 @@ urlpatterns = [
     path(route = 'about/', view = views.get_about, name='about'),
 
     # path for contact us view
-    path(route = 'contact/', view = views.get_about, name='about'),
+    path(route = 'contact/', view = views.contact, name='contact'),
 
     # path for registration
     path('registration/', views.registration_request, name='registration'),

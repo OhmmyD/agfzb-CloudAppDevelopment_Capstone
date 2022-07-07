@@ -2,33 +2,191 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Registration</title>
     {% load static %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+
+        /* Body */
+        body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #FFFFFF;
+        }
+
+        /* Navigation */
+        .topnav {
+            overflow: hidden;
+            background-color: #8D8DAA;
+            }
+
+        .topnav a {
+            color: #FFFFFF;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            }
+
+        .topnav .left-side a {
+            float: left;
+            }
+
+        .topnav .right-side {
+            float: right;
+            }
+
+        .topnav .right-side: hover {
+            float: right;
+            }
+
+        .topnav a:hover {
+            background-color: #F56D91;
+            text-decoration: none;
+            color: #FFFFFF;
+            }
+
+        .topnav .right-side .form-inline input[type=text], input[type=password] {
+            float: right;
+            margin-right: 5px;
+            margin-left: 20px;
+            font-size: 15px;
+            background: #FFFFFF;
+            border: none;
+            width: 150px; /* adjust as needed (as long as it doesn't break the topnav) */
+            }
+
+        /* Container */
+        .card-container {
+            width: 600px;
+            margin: 0 auto;
+            background-color: #FFFFFF
+        }
+
+        .card-container .card-container-header {
+            margin: 0 auto;
+            background-color: #8D8DAA;
+            color: #FFFFFF;
+            text-align: center;
+            padding: 25px;
+        }
+
+        .form-control{
+            background-color: #DFDFDE;
+            border: 0;
+        }
+
+        .form-group .btn{
+            background-color: #F56D91;
+            color: #FFFFFF;
+            width: 100%;
+        }
+
+
+        .form-group .btn:hover{
+            background-color: #8D8DAA;
+        }
+
+        .login-link {
+            color: #F56D91;
+            text-decoration: none;
+        }
+
+        .login-link:hover {
+            color: #8D8DAA;
+            text-decoration: none;
+        }
+
+    </style>
 </head>
+
     <body>
+
+        <!-- Navigation Bar -->
+        <nav class="topnav">
+            <span class = "left-side">
+    
+                <a href="/djangoapp">Home</a>
+                <a href="/djangoapp/about">About Us</a>
+                <a href="/djangoapp/contact">Contact Us</a>
+    
+            </span>
+    
+            <span class = "right-side" style="display: inline;">
+            {% if user.is_authenticated %}
+    
+                <a class="btn btn-link" href="#">{{ user.first_name }} {{user.last_name}} ({{ user.username }})</a>
+                <a class="btn btn-link" href="/djangoapp/logout">Logout</a>
+    
+            {% else %}
+    
+                <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+    
+                    {% csrf_token %}
+
+                    <a href="/djangoapp/login">Log In</a>
+    
+                </form>
+    
+            {% endif %}
+            </span>
+        </nav>
+
+        <br>
+
     <!--Add a registration form here -->
-    <form action="{% url 'djangoapp:registration' %}" method="post">
-        <div class="container"> <!--Style root div with .container class -->
-            {% csrf_token %}
-            <h1>Sign Up</h1>
-            <hr>
-            <div class="form-group"> <!--Style second div with .form-group class -->
-                <label for="username"><b>User Name</b></label>
-                <input type="text" class="form-control" placeholder="Enter User Name: " name="username" required> <!--Style input with .form-control class -->
-                <label for="firstname"><b>First Name</b></label>
-                <input type="text" class="form-control" placeholder="Enter First Name: " name="firstname" required> <!--Style input with .form-control class -->
-                <label for="lastname"><b>Last Name</b></label>
-                <input type="text" class="form-control" placeholder="Enter Last Name: " name="lastname" required> <!--Style input with .form-control class -->
-                <label for="psw"><b>Password</b></label>
-                <input type="password" class="form-control" placeholder="Enter Password: " name="psw" required> <!--Style input with .form-control class -->
-                {% if message %}
-                <div class="alert alert-warning"> <!--Style the message paragraph with .alert and .alert-warning class -->
-                    {{ message }}
-                </div>
-                {% endif %}
-                <button class="btn btn-primary" type="submit">Sign up</button> <!--Style button with .btn and .btn-primary class -->
-            </div>
+
+    <div class="card-container">
+
+        <h5 class="card-container-header">
+            Registration
+        </h5>
+
+        <div class="card" style="margin: 0 auto; padding: 25px;">
+            
+            <form action="{% url 'djangoapp:registration' %}" method="post">
+
+                {% csrf_token %}
+
+                    <div class="form-group"> <!--Style second div with .form-group class -->
+
+                        <label for="username"><b>User Name</b></label>
+                        <input type="text" class="form-control" placeholder="Enter User Name: " name="username" required> <!--Style input with .form-control class -->
+                        <br>
+
+                        <label for="firstname"><b>First Name</b></label>
+                        <input type="text" class="form-control" placeholder="Enter First Name: " name="firstname" required> <!--Style input with .form-control class -->
+                        <br>
+
+                        <label for="lastname"><b>Last Name</b></label>
+                        <input type="text" class="form-control" placeholder="Enter Last Name: " name="lastname" required> <!--Style input with .form-control class -->
+                        <br>
+
+                        <label for="psw"><b>Password</b></label> <br>
+                        <input type="password" class="form-control" placeholder="Enter Password: " name="psw" 
+                        style="width:100%; background-color: #DFDFDE"required> <!--Style input with .form-control class -->
+                        <br><br><br>
+
+                        {% if message %}
+                        <div class="alert alert-warning" style="text-align:center;"> <!--Style the message paragraph with .alert and .alert-warning class -->
+                            {{ message }}
+                        </div>
+                        {% endif %}
+                        <button class="btn" type="submit">Sign up</button> <!--Style button with .btn and .btn-primary class -->
+                        <br></br>
+
+                        <p style = "text-align: center;">
+                            Already registered? <a class="login-link" href="/djangoapp/login" >Log in here. </a>
+                        </p>
+
+                    </div>
+
+            </form>
+
         </div>
-    </form>
+
+    </div>
+    
     </body>
 </html>

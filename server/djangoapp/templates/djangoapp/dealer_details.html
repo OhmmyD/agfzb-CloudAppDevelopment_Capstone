@@ -63,7 +63,7 @@
 
         /* Container */
         .card-container {
-            width: 70%;
+            width: 60%;
             margin: 0 auto;
             background-color: #FFFFFF
         }
@@ -119,12 +119,7 @@
                 <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
     
                     {% csrf_token %}
-    
-                    
-                    <input type="text" class="form-control" placeholder="Username" name="username" >
-                    
-                    <input type="password" class="form-control" placeholder="Password" name="psw" >
-    
+
                     <a href="/djangoapp/login">Log In</a>
                     <a href="/djangoapp/registration">Register</a>
     

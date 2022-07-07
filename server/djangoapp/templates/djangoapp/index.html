@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
-
     <title>Dealership Review</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
 
     {% load static %}
     
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-
     <style>
 
         /* Body */
@@ -117,6 +120,11 @@
 
     </style>
 
+    <script>
+        $(function() {
+            $('#table').bootstrapTable()
+            })
+    </script>
 </head>
 
     <body>
@@ -142,11 +150,7 @@
                 <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
     
                     {% csrf_token %}
-                    
-                    <input type="text" class="form-control" placeholder="Username" name="username" >
-                    
-                    <input type="password" class="form-control" placeholder="Password" name="psw" >
-    
+
                     <a href="/djangoapp/login">Log In</a>
                     <a href="/djangoapp/registration">Register</a>
     
@@ -168,11 +172,11 @@
         <!-- Review Cards -->
         <div class="card" style="margin: 0 auto; padding: 25px;">
 
-                    <table class="table" id="table">
+                    <table class="table" id="table" data-filter-control="true">
                         <thead>
                             <tr>
                                 <th data-field="full_name">Dealership</th>
-                                <th data-field="state">State</th>
+                                <th data-field="state" data-filter-control="select">State</th>
                                 <th data-field="city">City</th>
                                 <th data-field="address">Address</th>                                
 
