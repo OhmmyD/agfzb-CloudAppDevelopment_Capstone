@@ -31,13 +31,19 @@ def get_request(url, **kwargs):
 
 # Create a `post_request` to make HTTP POST requests
 # e.g., response = requests.post(url, params=kwargs, json=payload)
+def post_request(url, payload, **kwargs):
 
+    response = requests.post(url, json=payload)
+    status_code = response.status_code
+
+    return status_code
 
 # Create a get_dealers_from_cf method to get dealers from a cloud function
 # def get_dealers_from_cf(url, **kwargs):
 # - Call get_request() with specified arguments
 # - Parse JSON results into a CarDealer object list
 def get_dealers_from_cf(url, **kwargs):
+
     results = []
     # Call get_request with a URL parameter
     json_result = get_request(url)
@@ -55,24 +61,30 @@ def get_dealers_from_cf(url, **kwargs):
                                    st=dealer_doc["st"], state=dealer_doc["state"], zip=dealer_doc["zip"])
             results.append(dealer_obj)
 
+    if 'dealerId' in kwargs:
+        results = [result for result in results if result.id == kwargs.get('dealerId')][0]
+
     return results
 
 # Create a get_dealer_reviews_from_cf method to get reviews by dealer id from a cloud function
 # def get_dealer_by_id_from_cf(url, dealerId):
 # - Call get_request() with specified arguments
 # - Parse JSON results into a DealerView object list
-def get_dealer_reviews_from_cf(url, dealerId):
+def get_dealer_reviews_from_cf(url):
     results = []
+    debug = []
     # Call get_request with a URL parameter
-    json_result = get_request(url, **dealerId)
+
+    json_result = get_request(url)
     
     if json_result:
 
         reviews = json_result["body"]["data"]["docs"]
 
         for review in reviews:
-
+            
             sentiment = analyze_review_sentiments(review['review'])
+            debug = debug + [{'review':review['review'], 'sentiment':sentiment}]
 
             # Create a DealerReview object
             review_obj = DealerReview(car_make = review['car_make'], car_model = review['car_model'],
@@ -112,7 +124,7 @@ def analyze_review_sentiments(text):
     natural_language_understanding = NaturalLanguageUnderstandingV1(version='2021-08-01',authenticator=authenticator) 
     natural_language_understanding.set_service_url(url) 
 
-    response = natural_language_understanding.analyze(text=text ,features=Features(sentiment=SentimentOptions(targets=[text]))).get_result() 
+    response = natural_language_understanding.analyze(text=text, language = 'en', features=Features(sentiment=SentimentOptions(targets=[text]))).get_result() 
 
     label=json.dumps(response, indent=2) 
 

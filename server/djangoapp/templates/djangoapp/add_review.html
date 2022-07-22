@@ -10,6 +10,12 @@
     
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
+    <script type="text/javascript">
+        $('.date-own').datepicker({
+           format: 'mm/dd/yyyy'
+         });
+   </script>
+
     <style>
 
         /* Body */
@@ -160,14 +166,14 @@
 
                     Vehicle Purchased: 
                     <select name="car" id="car" class="car">
-                        {% for car in carmodel %}
-                            <option selected value="{{car.year|date:'Y'}}/{{car.make.name}}/{{car.name}}">{{car}}</option>
+                        {% for car in cars %}
+                            <option selected value={{car.id}}>{{car}}</option>
                         {% endfor %}
                     </select>
                     <br></br>
                     
                     Purchase Date: 
-                    <input type="date" id="date" name="date">
+                    <input class="date-own form-control" type="date" name="purchasedate" id="purchasedate" style="width:231px">
                     <br></br>
                     <br></br>
                     <input type="submit" value="Submit Review">
