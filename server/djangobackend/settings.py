@@ -127,5 +127,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(STATIC_ROOT, 'media')
 MEDIA_URL = '/media/'
 
-CSRF_TRUSTED_ORIGINS = ['https://ohmdoungkhae-8000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai',
+CSRF_TRUSTED_ORIGINS = ['https://ohmdoungkhae-8000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/',
                         'ohmcapstone.us-east.mybluemix.net']
