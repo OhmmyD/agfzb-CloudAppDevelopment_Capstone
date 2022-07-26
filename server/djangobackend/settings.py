@@ -27,8 +27,9 @@ DEBUG = True
 
 APPEND_SLASH = True
 
-ALLOWED_HOSTS = ["localhost",
-                 "ohmcapstone.us-east.mybluemix.net"]
+ALLOWED_HOSTS = ["localhost", "localhost:8000",
+                 "ohmcapstone.us-east.mybluemix.net",
+                 "https://ohmdoungkhae-8000.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai"]
 
 
 # Application definition
