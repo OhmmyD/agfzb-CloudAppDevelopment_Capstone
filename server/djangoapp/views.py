@@ -129,6 +129,7 @@ def add_review(request, dealerId):
     dealer_url = "https://6c8c4165.us-east.apigw.appdomain.cloud/dealership/api/dealership"
     dealer = get_dealers_from_cf(dealer_url, dealerId=dealerId)
     context["dealer"] = dealer
+    test = dealer
     
     if request.method == 'GET':
 
@@ -136,7 +137,7 @@ def add_review(request, dealerId):
         cars = CarModel.objects.all()
         print(cars)
         context["cars"] = cars
-    
+
         return render(request, 'djangoapp/add_review.html', context)
 
     elif request.method == 'POST':
@@ -153,10 +154,9 @@ def add_review(request, dealerId):
             payload["dealership"] = dealerId
             payload["id"] = dealerId
             payload["review"] = request.POST["content"]
-            payload["purchase"] = False
-            if "purchasecheck" in request.POST:
-                if request.POST["purchasecheck"] == 'on':
-                    payload["purchase"] = True
+            payload["purchase"] = 'false'
+            if "purchase" in request.POST:
+                payload["purchase"] = 'true'
             payload["purchase_date"] = request.POST["purchasedate"]
             payload["car_make"] = car.make.name
             payload["car_model"] = car.name
